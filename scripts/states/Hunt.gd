@@ -1,5 +1,7 @@
 extends State
 
+var move_timeout_seconds = 0.25
+var cooldown = 0
 
 func _ready():
 	VALID_INTERRUPTS = ["sleep", "interact"]
@@ -7,7 +9,11 @@ func _ready():
 func enter():
 	pass
 
-func update(_delta):
+func update(delta):
+	if cooldown > 0:
+		cooldown -= delta
+		return
+
 	print("hunting")
-	owner.decrease_energy(1)
-	# TODO end early if we run out of path
+	owner.path_step()
+	cooldown = move_timeout_seconds

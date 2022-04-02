@@ -1,4 +1,6 @@
 extends State
 
 func enter():
-	return
+	print("destroying")
+	yield(get_tree().create_timer(2.0), "timeout")
+	emit_signal("finished", "hunt")

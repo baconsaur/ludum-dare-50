@@ -15,6 +15,3 @@ func _on_RetryButton_pressed():
 
 func _on_MainMenuButton_pressed():
 	get_tree().change_scene(menu_scene)
-
-func _on_ExitButton_pressed():
-	get_tree().quit()

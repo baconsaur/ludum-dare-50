@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://sprites/cat.png" type="Texture" id=1]
 [ext_resource path="res://scripts/CatController.gd" type="Script" id=2]
@@ -9,7 +9,10 @@
 [ext_resource path="res://scripts/states/Wake.gd" type="Script" id=7]
 [ext_resource path="res://scripts/states/Interact.gd" type="Script" id=8]
 
-[node name="Cat" type="Node2D"]
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 9.5, 7 )
+
+[node name="Cat" type="Area2D"]
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -33,3 +36,7 @@ script = ExtResource( 8 )
 
 [node name="Destroy" type="Node" parent="StateMachine"]
 script = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.5, -7 )
+shape = SubResource( 1 )

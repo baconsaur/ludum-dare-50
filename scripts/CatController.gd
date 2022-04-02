@@ -1,15 +1,19 @@
-extends Node2D
+extends Area2D
 
 export var max_energy = 10
 export var start_state = "wake"
 
 var energy = 0
 var path = []
+var grid_pos = Vector2()
 
 onready var sprite = $Sprite
+onready var collider = $CollisionShape2D
 onready var state_machine = $StateMachine
+onready var room_controller = get_node("/root/Game/Room")
 
 signal needs_path
+signal change_position
 
 func _ready():
 	state_machine.initialize(start_state)
@@ -35,3 +39,23 @@ func request_path():
 func set_path(new_path):
 	path = new_path
 	state_machine.interrupt_state("hunt")
+
+func path_step():
+	if not path:
+		state_machine.interrupt_state("sleep")
+		return
+
+	grid_pos = path.pop_front()
+	position = room_controller.to_isometric(grid_pos.x, grid_pos.y)  # Ew
+	decrease_energy(1)
+	
+	emit_signal("change_position", self)
+
+func destroy_object():
+	state_machine.interrupt_state("destroy")
+
+
+func _input(event):
+	# TODO interaction types/cooldown
+	if event is InputEventMouseButton:
+		state_machine.interrupt_state("interact")
