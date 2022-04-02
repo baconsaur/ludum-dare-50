@@ -24,7 +24,6 @@ script = SubResource( 1 )
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 8 )
-autoplay = true
 
 [node name="Room" parent="." instance=ExtResource( 1 )]
 position = Vector2( 160, 120 )

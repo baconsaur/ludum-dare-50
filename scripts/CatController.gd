@@ -5,7 +5,6 @@ export var start_state = "wake"
 
 var energy = 0
 var path = []
-var grid = []
 
 onready var sprite = $Sprite
 onready var state_machine = $StateMachine
@@ -31,7 +30,6 @@ func decrease_energy(energy_loss):
 		state_machine.interrupt_state("sleep")
 
 func request_path():
-	print("path request made")
 	emit_signal("needs_path", self)
 
 func set_path(new_path):
