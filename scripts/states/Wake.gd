@@ -4,6 +4,6 @@ func _ready():
 	VALID_INTERRUPTS = ["hunt"]
 
 func enter():
-	print("start waking")
+	owner.sprite.play("default")
 	owner.reset_energy()
 	owner.request_path()

@@ -54,8 +54,8 @@ func path_step():
 func destroy_object():
 	state_machine.interrupt_state("destroy")
 
-
 func _input(event):
 	# TODO interaction types/cooldown
 	if event is InputEventMouseButton:
+		decrease_energy(2)
 		state_machine.interrupt_state("interact")
