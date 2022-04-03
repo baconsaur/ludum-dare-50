@@ -32,6 +32,8 @@ var cat_obj = preload("res://scenes/Cat.tscn")
 var destructible_objs = [preload("res://scenes/Destructible.tscn")]
 var game_over_scene = "res://scenes/GameOver.tscn"
 
+signal cat_interaction
+
 func _ready():
 	randomize()
 	start_grid_position.x = -len(grid_map[0]) * (tile_dimensions.x + tile_dimensions.y) / 2
@@ -128,6 +130,7 @@ func spawn_cat():
 	var cat = cat_obj.instance()
 	cat.connect("needs_path", self, "generate_path", [], CONNECT_DEFERRED)
 	cat.connect("change_position", self, "check_cat")
+	cat.connect("interaction_received", self, "handle_cat_interaction")
 	add_child(cat)
 	cat.position = to_isometric(grid_x, grid_y)
 	cat.grid_pos = Vector2(grid_x, grid_y)
@@ -183,3 +186,6 @@ func check_cat(cat):
 
 	destructible.destroy()
 	cat.destroy_object()
+
+func handle_cat_interaction(cat):
+	emit_signal("cat_interaction", cat)

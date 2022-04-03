@@ -17,6 +17,7 @@ onready var room_controller = get_node("/root/Game/Room")
 
 signal needs_path
 signal change_position
+signal interaction_received
 
 func _ready():
 	state_machine.initialize(start_state)
@@ -78,11 +79,16 @@ func destroy_object():
 	elif current_direction.x == 0 and current_direction.y < 0:
 		play_animation("destroy_nw")
 
+func is_interactable():
+	return "interact" in state_machine.current_state.VALID_INTERRUPTS
+
+func begin_interaction(interaction):
+	decrease_energy(interaction["energy_cost"])
+	state_machine.interrupt_state("interact") # TODO break up states into interaction types
+
 func _on_Cat_input_event(viewport, event, shape_idx):
-	# TODO interaction types/cooldown
 	if event is InputEventMouseButton:
-		decrease_energy(2)
-		state_machine.interrupt_state("interact")
+		emit_signal("interaction_received", self)
 
 func play_animation(anim_name):
 	if sprite.animation != anim_name:
