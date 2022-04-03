@@ -7,7 +7,7 @@ func _ready():
 	VALID_INTERRUPTS = ["sleep", "interact"]
 
 func enter():
-	owner.sprite.play("default")
+	cooldown = 0
 
 func update(delta):
 	if cooldown > 0:
@@ -15,4 +15,5 @@ func update(delta):
 		return
 
 	owner.path_step()
+	
 	cooldown = move_timeout_seconds

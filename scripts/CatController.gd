@@ -6,6 +6,7 @@ export var start_state = "wake"
 var energy = 0
 var path = []
 var grid_pos = Vector2()
+var current_direction = Vector2(-1, 1)
 
 onready var sprite = $Sprite
 onready var collider = $CollisionShape2D
@@ -45,13 +46,34 @@ func path_step():
 		state_machine.interrupt_state("sleep")
 		return
 
+	var old_grid_pos = grid_pos
 	grid_pos = path.pop_front()
+	current_direction = grid_pos - old_grid_pos
+	
+	if current_direction.x == 0 and current_direction.y > 0:
+		sprite.play("run_se")
+	elif current_direction.x < 0 and current_direction.y == 0:
+		sprite.play("run_sw")
+	elif current_direction.x > 0 and current_direction.y == 0:
+		sprite.play("run_ne")
+	elif current_direction.x == 0 and current_direction.y < 0:
+		sprite.play("run_nw")
+	
 	position = room_controller.to_isometric(grid_pos.x, grid_pos.y)  # Ew
 	decrease_energy(1)
 	
 	emit_signal("change_position", self)
 
 func destroy_object():
+	if current_direction.x == 0 and current_direction.y > 0:
+		sprite.play("destroy_se")
+	elif current_direction.x < 0 and current_direction.y == 0:
+		sprite.play("destroy_sw")
+	elif current_direction.x > 0 and current_direction.y == 0:
+		sprite.play("destroy_ne")
+	elif current_direction.x == 0 and current_direction.y < 0:
+		sprite.play("destroy_nw")
+
 	state_machine.interrupt_state("destroy")
 
 func _input(event):

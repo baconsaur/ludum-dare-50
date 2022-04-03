@@ -5,17 +5,19 @@ export var tile_dimensions = Vector2(16, 8)
 export var num_desctructibles = 5
 export var destructibles_per_hunt = 5
 
+var floor_tiles = ["wood", "carpet"]
+var wall_tiles = ["wall_xn", "wall_x", "wall_xs", "wall_yn", "wall_y", "wall_ys", "pillar"]
 var grid_map = [
-	[0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-	[1, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+	["wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wall_x", "wall_xs", "carpet", "wall_ys", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_yn", "wood", "wood", "wood"],
+	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["carpet", "carpet", "pillar", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
 ]
 var grid = []
 var cats = []
@@ -33,18 +35,32 @@ func _ready():
 	randomize()
 	start_grid_position.x = -len(grid_map[0]) * (tile_dimensions.x + tile_dimensions.y) / 2
 
-
+	# Make the grid
 	for x in range(len(grid_map)):
 		grid.append([])
 		for y in range(len(grid_map[x])):
 			var grid_space
-			if grid_map[x][y]:
+			if grid_map[x][y] in wall_tiles:
 				grid_space = grid_wall_obj.instance()
 			else:
 				grid_space = grid_space_obj.instance()
+			grid[x].append(grid_space)
+	
+	# Draw the grid in correct render order
+	for y in range(len(grid_map[0])):
+		for x in range(len(grid_map) - 1, -1, -1):
+			var grid_space = grid[x][y]
 			add_child(grid_space)
 			grid_space.position = to_isometric(x, y)
-			grid[x].append(grid_space)
+			grid_space.sprite.play(grid_map[x][y])
+
+#	for x in range(len(grid_map)):
+#		for y in range(len(grid_map[x]) -1 , 0, -1):
+#			var grid_space = grid[x][y]
+#			add_child(grid_space)
+#			grid_space.position = to_isometric(x, y)
+#			grid_space.sprite.play(grid_map[x][y])
+	
 	
 	a_star = create_a_star_grid()
 
@@ -58,14 +74,14 @@ func create_a_star_grid():
 	
 	for x in len(grid):
 		for y in len(grid[0]):
-			if grid_map[x][y]:
+			if grid_map[x][y] in wall_tiles:
 				continue
 			var cell_id = grid_indices_to_cell_id(x, y)
 			new_a_star.add_point(cell_id, Vector2(x, y))
 	
 	for x in len(grid):
 		for y in len(grid[0]):
-			if grid_map[x][y]:
+			if grid_map[x][y] in wall_tiles:
 				continue
 			var cell_id = grid_indices_to_cell_id(x, y)
 			for neighbor in get_cell_neighbors(x, y):
@@ -89,7 +105,7 @@ func spawn_destructible():
 	var grid_y = randi() % len(grid[0])
 	var grid_space = grid[grid_x][grid_y]
 
-	if grid_map[grid_x][grid_y] or grid_space.occupying_destructible:
+	if grid_map[grid_x][grid_y] in wall_tiles or grid_space.occupying_destructible:
 		spawn_destructible()
 		return
 
@@ -104,7 +120,7 @@ func spawn_cat():
 
 	# TODO prevent overlapping cats too
 	var current_grid_space = grid[grid_x][grid_y]
-	if grid_map[grid_x][grid_y] or current_grid_space.occupying_destructible:
+	if grid_map[grid_x][grid_y] in wall_tiles or current_grid_space.occupying_destructible:
 		spawn_cat()
 		return
 
@@ -152,17 +168,13 @@ func get_cell_neighbors(x, y):
 		Vector2(x,y+1),
 		Vector2(x-1,y),
 		Vector2(x+1,y),
-		Vector2(x-1,y-1),
-		Vector2(x+1,y+1),
-		Vector2(x-1,y+1),
-		Vector2(x+1,y-1),
+#		Vector2(x-1,y-1),  # Do I want to do a diagonal animation? NOT REALLY
+#		Vector2(x+1,y+1),
+#		Vector2(x-1,y+1),
+#		Vector2(x+1,y-1),
 	]
 
 func check_cat(cat):
-	# TODO remove when walls work
-	if grid_map[cat.grid_pos.x][cat.grid_pos.y]:
-		return
-
 	var destructible = grid[cat.grid_pos.x][cat.grid_pos.y].occupying_destructible
 
 	if not destructible or destructible.is_destroyed:
