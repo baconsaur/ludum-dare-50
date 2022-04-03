@@ -169,7 +169,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 9.5, 7 )
+extents = Vector2( 10.5, 11 )
 
 [node name="Cat" type="Area2D"]
 script = ExtResource( 2 )
@@ -199,6 +199,9 @@ script = ExtResource( 8 )
 script = ExtResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2( -1.5, -7 )
+position = Vector2( -1.5, -6 )
 shape = SubResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[connection signal="input_event" from="." to="." method="_on_Cat_input_event"]

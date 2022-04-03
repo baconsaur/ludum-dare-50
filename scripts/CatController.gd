@@ -7,10 +7,12 @@ var energy = 0
 var path = []
 var grid_pos = Vector2()
 var current_direction = Vector2(-1, 1)
+var target_position = Vector2()
 
 onready var sprite = $Sprite
 onready var collider = $CollisionShape2D
 onready var state_machine = $StateMachine
+onready var tween = $Tween
 onready var room_controller = get_node("/root/Game/Room")
 
 signal needs_path
@@ -51,33 +53,37 @@ func path_step():
 	current_direction = grid_pos - old_grid_pos
 	
 	if current_direction.x == 0 and current_direction.y > 0:
-		sprite.play("run_se")
+		play_animation("run_se")
 	elif current_direction.x < 0 and current_direction.y == 0:
-		sprite.play("run_sw")
+		play_animation("run_sw")
 	elif current_direction.x > 0 and current_direction.y == 0:
-		sprite.play("run_ne")
+		play_animation("run_ne")
 	elif current_direction.x == 0 and current_direction.y < 0:
-		sprite.play("run_nw")
+		play_animation("run_nw")
 	
-	position = room_controller.to_isometric(grid_pos.x, grid_pos.y)  # Ew
+	target_position = room_controller.to_isometric(grid_pos.x, grid_pos.y)  # Ew
 	decrease_energy(1)
 	
 	emit_signal("change_position", self)
 
 func destroy_object():
-	if current_direction.x == 0 and current_direction.y > 0:
-		sprite.play("destroy_se")
-	elif current_direction.x < 0 and current_direction.y == 0:
-		sprite.play("destroy_sw")
-	elif current_direction.x > 0 and current_direction.y == 0:
-		sprite.play("destroy_ne")
-	elif current_direction.x == 0 and current_direction.y < 0:
-		sprite.play("destroy_nw")
-
 	state_machine.interrupt_state("destroy")
+	
+	if current_direction.x == 0 and current_direction.y > 0:
+		play_animation("destroy_se")
+	elif current_direction.x < 0 and current_direction.y == 0:
+		play_animation("destroy_sw")
+	elif current_direction.x > 0 and current_direction.y == 0:
+		play_animation("destroy_ne")
+	elif current_direction.x == 0 and current_direction.y < 0:
+		play_animation("destroy_nw")
 
-func _input(event):
+func _on_Cat_input_event(viewport, event, shape_idx):
 	# TODO interaction types/cooldown
 	if event is InputEventMouseButton:
 		decrease_energy(2)
 		state_machine.interrupt_state("interact")
+
+func play_animation(anim_name):
+	if sprite.animation != anim_name:
+		sprite.play(anim_name)

@@ -4,7 +4,7 @@ var interact_timeout_seconds = 1
 var cooldown = 0
 
 func enter():
-	owner.sprite.play("play")
+	owner.play_animation("play")
 	cooldown = interact_timeout_seconds
 
 func update(delta):

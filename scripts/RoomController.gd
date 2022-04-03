@@ -6,18 +6,19 @@ export var num_desctructibles = 5
 export var destructibles_per_hunt = 5
 
 var floor_tiles = ["wood", "carpet"]
-var wall_tiles = ["wall_xn", "wall_x", "wall_xs", "wall_yn", "wall_y", "wall_ys", "pillar"]
+var wall_tiles = ["wall_xn", "wall_x", "wall_xs", "wall_yn", "wall_y", "wall_ys", "pillar", "wall_br", "wall_bl", "wall_blx", "wall_bry", "blank"]
 var grid_map = [
-	["wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wall_x", "wall_xs", "carpet", "wall_ys", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_yn", "wood", "wood", "wood"],
-	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
-	["carpet", "carpet", "pillar", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
-	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
-	["carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wall_bl", "wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wall_bl", "wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wall_blx", "wall_x", "wall_xs", "carpet", "wall_ys", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
+	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_yn", "wood", "wood", "wood"],
+	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "carpet", "carpet", "pillar", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["blank", "wall_br", "wall_br", "wall_br", "wall_br", "wall_br", "wall_br", "wall_bry", "wall_br", "wall_br", "wall_br"],
 ]
 var grid = []
 var cats = []

@@ -7,7 +7,9 @@ func _ready():
 	VALID_INTERRUPTS = ["wake"]
 
 func enter():
-	owner.sprite.play("sleep")
+	yield(owner.tween,"tween_all_completed")
+	
+	owner.play_animation("sleep")
 	cooldown = sleep_timeout_seconds
 
 func update(delta):
