@@ -1,6 +1,6 @@
 extends State
 
-var sleep_timeout_seconds = 0.5
+var sleep_timeout_seconds = 0.4
 var cooldown = 0
 
 func _ready():
@@ -19,3 +19,4 @@ func update(delta):
 	owner.increase_energy(1)
 	
 	cooldown = sleep_timeout_seconds
+

@@ -11,3 +11,7 @@ func setup(pos):
 func destroy():
 	is_destroyed = true
 	sprite.play("broken")
+
+func fix():
+	is_destroyed = false
+	sprite.play("default")

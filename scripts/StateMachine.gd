@@ -4,14 +4,16 @@ signal state_changed(current_state)
 
 var states_map = {}
 var current_state = null
-
+var INTERACTION_STATES = ["pet", "treat", "catnip"]
 
 func _ready():
 	states_map = {
 		"sleep": $Sleep,
 		"wake": $Wake,
 		"hunt": $Hunt,
-		"interact": $Interact,
+		"pet": $Pet,
+		"treat": $Treat,
+		"catnip": $Catnip,
 		"destroy": $Destroy,
 	}
 	for child in get_children():

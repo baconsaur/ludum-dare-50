@@ -23,7 +23,7 @@ var button_config = {
 		"cost": 10,
 		"button": null,
 	},
-	"scratching_post": {
+	"fix": {
 		"icon": null,
 		"cost": 20,
 		"button": null,
@@ -119,17 +119,12 @@ func catnip_toggled(button_pressed):
 		return
 	emit_signal("set_active_tool", "catnip")
 
-func scratching_post_toggled(button_pressed):
-	if not button_pressed:
-		return
-	emit_signal("buy_item", "scratching_post")
-
 func treat_pressed():
 	emit_signal("buy_item", "treat", button_config["treat"].cost)
 
 func catnip_pressed():
 	emit_signal("buy_item", "catnip", button_config["catnip"].cost)
 
-func scratching_post_pressed():
-	emit_signal("buy_item", "scratching_post", button_config["scratching_post"].cost)
+func fix_pressed():
+	emit_signal("buy_item", "fix", button_config["fix"].cost)
 

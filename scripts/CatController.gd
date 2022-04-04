@@ -1,13 +1,15 @@
 extends Area2D
 
-export var max_energy = 10
+export var max_energy = 12
 export var start_state = "wake"
+export var interact_cooldown_seconds = 1.2
 
 var energy = 0
 var path = []
 var grid_pos = Vector2()
 var current_direction = Vector2(-1, 1)
 var target_position = Vector2()
+var interact_cooldown = 0
 
 onready var sprite = $Sprite
 onready var collider = $CollisionShape2D
@@ -22,6 +24,10 @@ signal interaction_received
 func _ready():
 	state_machine.initialize(start_state)
 
+func _process(delta):
+	if interact_cooldown > 0:
+		interact_cooldown -= delta
+
 func reset_energy():
 	energy = max_energy
 
@@ -35,7 +41,6 @@ func decrease_energy(energy_loss):
 	energy -= energy_loss
 	if energy <= 0:
 		energy = 0
-		state_machine.interrupt_state("sleep")
 
 func request_path():
 	emit_signal("needs_path", self)
@@ -80,11 +85,18 @@ func destroy_object():
 		play_animation("destroy_nw")
 
 func is_interactable():
-	return "interact" in state_machine.current_state.VALID_INTERRUPTS
+	if interact_cooldown > 0:
+		return false
 
-func begin_interaction(interaction):
-	decrease_energy(interaction["energy_cost"])
-	state_machine.interrupt_state("interact") # TODO break up states into interaction types
+	for state in state_machine.INTERACTION_STATES:
+		if state in state_machine.current_state.VALID_INTERRUPTS:
+			return true
+	return false
+
+func begin_interaction(interaction_name, interaction_data):
+	interact_cooldown = interact_cooldown_seconds
+	state_machine.interrupt_state(interaction_name)
+	decrease_energy(interaction_data["energy_cost"])
 
 func _on_Cat_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:

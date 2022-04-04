@@ -2,22 +2,22 @@ extends Node2D
 
 export var start_grid_position = Vector2(0, 32)
 export var tile_dimensions = Vector2(16, 8)
-export var num_desctructibles = 5
-export var destructibles_per_hunt = 5
+export var num_desctructibles = 8
+export var destructibles_per_hunt = 3
 
 var floor_tiles = ["wood", "carpet"]
 var wall_tiles = ["wall_xn", "wall_x", "wall_xs", "wall_yn", "wall_y", "wall_ys", "pillar", "wall_br", "wall_bl", "wall_blx", "wall_bry", "blank"]
 var grid_map = [
-	["wall_bl", "wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wall_bl", "wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wall_bl", "wood", "wood", "wood", "wall_y", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wall_blx", "wall_x", "wall_xs", "carpet", "wall_ys", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet"],
-	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_yn", "wood", "wood", "wood"],
-	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
-	["wall_bl", "carpet", "carpet", "pillar", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
-	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
-	["wall_bl", "carpet", "carpet", "carpet", "carpet", "carpet", "carpet", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood", "wood", "wood", "wood"],
+	["wall_blx", "wall_x", "wall_xs", "wood", "wall_ys", "wood", "wood", "wood", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "wood", "wood", "wood", "wood", "wood", "wood", "wood", "wood"],
+	["wall_bl", "wood", "carpet", "carpet", "carpet", "carpet", "wood", "wall_yn", "wood", "wood", "wood"],
+	["wall_bl", "wood", "carpet", "carpet", "carpet", "carpet", "wood", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "wood", "carpet", "carpet", "carpet", "carpet", "wood", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "wood", "carpet", "carpet", "carpet", "carpet", "wood", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "wood", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood"],
 	["blank", "wall_br", "wall_br", "wall_br", "wall_br", "wall_br", "wall_br", "wall_bry", "wall_br", "wall_br", "wall_br"],
 ]
 var grid = []
@@ -31,6 +31,7 @@ var grid_wall_obj = preload("res://scenes/GridWall.tscn")
 var cat_obj = preload("res://scenes/Cat.tscn")
 var destructible_objs = [preload("res://scenes/Destructible.tscn")]
 var game_over_scene = "res://scenes/GameOver.tscn"
+var cat_skins = [preload("res://sprites/cat1_frames.tres")]
 
 signal cat_interaction
 
@@ -56,14 +57,6 @@ func _ready():
 			add_child(grid_space)
 			grid_space.position = to_isometric(x, y)
 			grid_space.sprite.play(grid_map[x][y])
-
-#	for x in range(len(grid_map)):
-#		for y in range(len(grid_map[x]) -1 , 0, -1):
-#			var grid_space = grid[x][y]
-#			add_child(grid_space)
-#			grid_space.position = to_isometric(x, y)
-#			grid_space.sprite.play(grid_map[x][y])
-	
 	
 	a_star = create_a_star_grid()
 
@@ -132,8 +125,12 @@ func spawn_cat():
 	cat.connect("change_position", self, "check_cat")
 	cat.connect("interaction_received", self, "handle_cat_interaction")
 	add_child(cat)
+	var cat_skin = cat_skins[randi() % len(cat_skins)]
+	
+	cat.sprite.set_sprite_frames(cat_skin)
 	cat.position = to_isometric(grid_x, grid_y)
 	cat.grid_pos = Vector2(grid_x, grid_y)
+	
 	cats.append(cat)
 
 func grid_indices_to_cell_id(x, y):
@@ -185,7 +182,15 @@ func check_cat(cat):
 		return
 
 	destructible.destroy()
+	destroyed_destructibles.append(destructible)
 	cat.destroy_object()
 
 func handle_cat_interaction(cat):
 	emit_signal("cat_interaction", cat)
+
+func fix_destructible():
+	if destroyed_destructibles:
+		var destructible = destroyed_destructibles.pop_front()
+		destructible.fix()
+	else:
+		spawn_destructible()
