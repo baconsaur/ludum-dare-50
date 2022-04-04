@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://sprites/cat1_frames.tres" type="SpriteFrames" id=1]
 [ext_resource path="res://scripts/CatController.gd" type="Script" id=2]
@@ -21,9 +21,24 @@
 [ext_resource path="res://sound/meow1.mp3" type="AudioStream" id=19]
 [ext_resource path="res://sound/cracked_out.wav" type="AudioStream" id=20]
 [ext_resource path="res://sound/crunch.wav" type="AudioStream" id=21]
+[ext_resource path="res://sprites/leaf_particle.png" type="Texture" id=22]
+[ext_resource path="res://sprites/hearticle.png" type="Texture" id=23]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8.5, 7.5 )
+
+[sub_resource type="CanvasItemMaterial" id=2]
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 0.489773 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.230956, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0.381215, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
 
 [node name="Cat" type="Area2D"]
 script = ExtResource( 2 )
@@ -108,5 +123,47 @@ volume_db = 11.362
 [node name="Nip" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 20 )
 volume_db = -4.37
+
+[node name="LeafParticles" type="CPUParticles2D" parent="."]
+material = SubResource( 2 )
+position = Vector2( 0, -6 )
+z_index = 10
+emitting = false
+amount = 15
+lifetime = 4.0
+one_shot = true
+speed_scale = 1.7
+explosiveness = 0.31
+lifetime_randomness = 0.73
+texture = ExtResource( 22 )
+emission_shape = 2
+emission_rect_extents = Vector2( 12, 6 )
+gravity = Vector2( 0, -3 )
+orbit_velocity = 0.1
+orbit_velocity_random = 1.0
+angle = 360.0
+angle_random = 1.0
+scale_amount_curve = SubResource( 4 )
+color_ramp = SubResource( 3 )
+
+[node name="Hearticles" type="CPUParticles2D" parent="."]
+material = SubResource( 2 )
+position = Vector2( 0, -14 )
+z_index = 10
+emitting = false
+amount = 4
+one_shot = true
+speed_scale = 1.2
+lifetime_randomness = 0.73
+texture = ExtResource( 23 )
+emission_shape = 2
+emission_rect_extents = Vector2( 8, 6 )
+gravity = Vector2( 0, -40 )
+angular_velocity = 5.0
+angular_velocity_random = 1.0
+damping = 4.0
+damping_random = 1.0
+scale_amount_curve = SubResource( 4 )
+color_ramp = SubResource( 3 )
 
 [connection signal="input_event" from="." to="." method="_on_Cat_input_event"]

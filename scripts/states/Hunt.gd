@@ -1,6 +1,6 @@
 extends State
 
-var move_timeout_seconds = 0.2
+var move_timeout_seconds = 0.3
 var cooldown = 0
 var last_position = Vector2()
 var meow_chance = 0.15

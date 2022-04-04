@@ -20,6 +20,8 @@ onready var room_controller = get_node("/root/Game/Room")
 onready var purr_sound = $Purr
 onready var eat_sound = $Eat
 onready var catnip_sound = $Nip
+onready var leaf_particles = $LeafParticles
+onready var hearticles = $Hearticles
 
 signal needs_path
 signal change_position
