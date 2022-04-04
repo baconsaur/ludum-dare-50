@@ -5,7 +5,10 @@ var buy_button = preload("res://scenes/buttons/BuyButton.tscn")
 var use_button = preload("res://scenes/buttons/UseButton.tscn")
 var buy_button_class = preload("res://scripts/BuyButton.gd")
 var use_button_group = preload("res://scenes/buttons/UseButtonGroup.tres")
+var sound_on_texture = preload("res://sprites/sound_controls3.png")
+var sound_off_texture = preload("res://sprites/sound_controls4.png")
 
+var sound_on = true
 var default_button = null
 var button_config = {
 	"pet": {
@@ -32,11 +35,19 @@ var button_config = {
 
 onready var dollar_label = $NinePatchRect/VBoxContainer/Dollars
 onready var button_container = $NinePatchRect/VBoxContainer
+onready var sound_control = $NinePatchRect/SoundControl
+onready var music = get_node("/root/Music")
+onready var sound_bus = AudioServer.get_bus_index("Master")
 
 signal buy_item
 signal set_active_tool
 
 func _ready():
+	var current_volume = db2linear(AudioServer.get_bus_volume_db(sound_bus))
+	if current_volume == 0:
+		sound_on = false
+		toggle_sound_icon()
+	
 	for config in button_config:
 		var button
 		if config == "pet":
@@ -48,6 +59,12 @@ func _ready():
 		button_config[config]["button"] = button
 		button_container.add_child(button)
 		button.get_node("Icon").texture = button_config[config]["icon"]
+
+func toggle_sound_icon():
+	if sound_on:
+		sound_control.set_normal_texture(sound_on_texture)
+	else:
+		sound_control.set_normal_texture(sound_off_texture)
 
 func _process(delta):
 	if not get_tree().paused and Input.is_action_just_pressed("ui_cancel"):
@@ -132,3 +149,12 @@ func catnip_pressed():
 func fix_pressed():
 	emit_signal("buy_item", "fix", button_config["fix"].cost)
 
+func _on_SoundControl_pressed():
+	if sound_on:
+		AudioServer.set_bus_volume_db(sound_bus, linear2db(0))
+		sound_on = false
+	else:
+		AudioServer.set_bus_volume_db(sound_bus, linear2db(1))
+		sound_on = true
+		
+	toggle_sound_icon()
