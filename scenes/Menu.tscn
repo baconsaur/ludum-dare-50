@@ -37,33 +37,38 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 2 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI"]
-anchor_top = 0.5
-anchor_bottom = 0.5
-margin_left = 123.0
-margin_top = -279.0
-margin_right = 227.0
-margin_bottom = -209.0
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/UI"]
+anchor_right = 1.0
+margin_right = -683.0
+margin_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/CenterContainer"]
+margin_left = 84.0
+margin_top = 87.0
+margin_right = 257.0
+margin_bottom = 168.0
 grow_vertical = 0
 size_flags_vertical = 3
 
-[node name="Title" type="Label" parent="CanvasLayer/UI/VBoxContainer"]
-margin_right = 104.0
+[node name="Title" type="Label" parent="CanvasLayer/UI/CenterContainer/VBoxContainer"]
+margin_right = 173.0
 margin_bottom = 45.0
 rect_min_size = Vector2( 0, 45 )
 custom_fonts/font = SubResource( 1 )
-text = "A GAME!!!"
+text = "Tabby Turmoil"
 align = 1
 valign = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/CenterContainer/VBoxContainer"]
 margin_top = 49.0
-margin_right = 104.0
+margin_right = 173.0
 margin_bottom = 81.0
 grow_vertical = 2
 
-[node name="StartButton" type="Button" parent="CanvasLayer/UI/VBoxContainer/VBoxContainer"]
-margin_right = 104.0
+[node name="StartButton" type="Button" parent="CanvasLayer/UI/CenterContainer/VBoxContainer/VBoxContainer"]
+margin_right = 173.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 custom_fonts/font = SubResource( 7 )
@@ -74,4 +79,4 @@ custom_styles/disabled = SubResource( 5 )
 custom_styles/normal = SubResource( 6 )
 text = "Start"
 
-[connection signal="pressed" from="CanvasLayer/UI/VBoxContainer/VBoxContainer/StartButton" to="CanvasLayer/UI" method="_on_StartButton_pressed"]
+[connection signal="pressed" from="CanvasLayer/UI/CenterContainer/VBoxContainer/VBoxContainer/StartButton" to="CanvasLayer/UI" method="_on_StartButton_pressed"]

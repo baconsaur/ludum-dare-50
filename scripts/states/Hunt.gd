@@ -7,7 +7,7 @@ var meow_chance = 0.15
 
 func _ready():
 	randomize()
-	VALID_INTERRUPTS = ["sleep", "pet", "treat", "catnip"]
+	VALID_INTERRUPTS = ["sleep", "pet", "treat", "catnip", "destroy"]
 
 func enter():
 	cooldown = 0

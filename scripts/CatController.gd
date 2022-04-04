@@ -63,13 +63,13 @@ func path_step():
 	grid_pos = path.pop_front()
 	current_direction = grid_pos - old_grid_pos
 	
-	if current_direction.x == 0 and current_direction.y > 0:
+	if current_direction.x <= 0 and current_direction.y > 0:
 		play_animation("run_se")
-	elif current_direction.x < 0 and current_direction.y == 0:
+	elif current_direction.x < 0 and current_direction.y <= 0:
 		play_animation("run_sw")
-	elif current_direction.x > 0 and current_direction.y == 0:
+	elif current_direction.x > 0 and current_direction.y <= 0:
 		play_animation("run_ne")
-	elif current_direction.x == 0 and current_direction.y < 0:
+	elif current_direction.x <= 0 and current_direction.y < 0:
 		play_animation("run_nw")
 	
 	target_position = room_controller.to_isometric(grid_pos.x, grid_pos.y)  # Ew
@@ -79,15 +79,6 @@ func path_step():
 
 func destroy_object():
 	state_machine.interrupt_state("destroy")
-	
-	if current_direction.x == 0 and current_direction.y > 0:
-		play_animation("destroy_se")
-	elif current_direction.x < 0 and current_direction.y == 0:
-		play_animation("destroy_sw")
-	elif current_direction.x > 0 and current_direction.y == 0:
-		play_animation("destroy_ne")
-	elif current_direction.x == 0 and current_direction.y < 0:
-		play_animation("destroy_nw")
 
 func is_interactable():
 	if interact_cooldown > 0:

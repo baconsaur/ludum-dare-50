@@ -6,9 +6,9 @@ export var num_desctructibles = 8
 export var destructibles_per_hunt = 1
 
 var floor_tiles = ["wood", "carpet"]
-var wall_tiles = ["wall_xn", "wall_x", "wall_xs", "wall_yn", "wall_y", "wall_ys", "pillar", "wall_br", "wall_bl", "wall_blx", "wall_bry", "blank"]
+var wall_tiles = ["wall_xn", "wall_x", "wall_xs", "wall_yn", "wall_y", "wall_ys", "pillar", "wall_br", "wall_bl", "wall_blx", "wall_bry", "blank", "couch_l", "couch_r"]
 var grid_map = [
-	["wall_bl", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "wood", "wall_yn", "wood", "wood", "wood", "wood", "wood", "wood"],
 	["wall_bl", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood", "wood", "wood", "wood"],
 	["wall_bl", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood", "wood", "wood", "wood"],
 	["wall_blx", "wall_x", "wall_xs", "wood", "wall_ys", "wood", "wood", "wood", "wood", "wood", "wood"],
@@ -17,7 +17,7 @@ var grid_map = [
 	["wall_bl", "wood", "carpet", "carpet", "carpet", "carpet", "wood", "wall_y", "wood", "wood", "wood"],
 	["wall_bl", "wood", "carpet", "carpet", "carpet", "carpet", "wood", "wall_y", "wood", "wood", "wood"],
 	["wall_bl", "wood", "carpet", "carpet", "carpet", "carpet", "wood", "wall_y", "wood", "wood", "wood"],
-	["wall_bl", "wood", "wood", "wood", "wood", "wood", "wood", "wall_y", "wood", "wood", "wood"],
+	["wall_bl", "wood", "wood", "couch_l", "couch_r", "wood", "wood", "wall_y", "wood", "wood", "wood"],
 	["blank", "wall_br", "wall_br", "wall_br", "wall_br", "wall_br", "wall_br", "wall_bry", "wall_br", "wall_br", "wall_br"],
 ]
 var grid = []
@@ -31,7 +31,12 @@ var grid_wall_obj = preload("res://scenes/GridWall.tscn")
 var cat_obj = preload("res://scenes/Cat.tscn")
 var destructible_objs = [preload("res://scenes/Destructible.tscn")]
 var game_over_scene = "res://scenes/GameOver.tscn"
-var cat_skins = [preload("res://sprites/cat1_frames.tres")]
+var cat_skins = [
+	preload("res://sprites/cat1_frames.tres"),
+	preload("res://sprites/cat2_frames.tres"),
+	preload("res://sprites/cat3_frames.tres"),
+	preload("res://sprites/cat4_frames.tres"),
+]
 var destructible_skins = [preload("res://sprites/destructible1_frames.tres"), preload("res://sprites/destructible2_frames.tres"), preload("res://sprites/destructible3_frames.tres")]
 
 signal cat_interaction
@@ -130,6 +135,8 @@ func spawn_cat():
 	cat.connect("change_position", self, "check_cat")
 	cat.connect("interaction_received", self, "handle_cat_interaction")
 	add_child(cat)
+	
+	randomize()
 	var cat_skin = cat_skins[randi() % len(cat_skins)]
 	cat.sprite.set_sprite_frames(cat_skin)
 	
