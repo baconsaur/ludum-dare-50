@@ -27,6 +27,7 @@ config/icon="res://icon.png"
 [autoload]
 
 IntegerResolutionHandler="*res://addons/integer_resolution_handler/integer_resolution_handler.gd"
+Music="*res://scenes/Music.tscn"
 
 [display]
 

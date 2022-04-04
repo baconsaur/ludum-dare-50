@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://sprites/fonts/dpcomic.regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://scripts/MainMenu.gd" type="Script" id=2]
-[ext_resource path="res://sound/placeholder_music.wav" type="AudioStream" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -86,9 +85,6 @@ text = "Exit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Music" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource( 3 )
 
 [connection signal="pressed" from="CanvasLayer/UI/VBoxContainer/VBoxContainer/StartButton" to="CanvasLayer/UI" method="_on_StartButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/UI/VBoxContainer/VBoxContainer/ExitButton" to="CanvasLayer/UI" method="_on_ExitButton_pressed"]

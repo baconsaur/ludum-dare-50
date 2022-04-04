@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/cracked_out.wav-651b0fe854f10f15b93f98d9e43cc8cd.sample"
+
+[deps]
+
+source_file="res://sound/cracked_out.wav"
+dest_files=[ "res://.import/cracked_out.wav-651b0fe854f10f15b93f98d9e43cc8cd.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

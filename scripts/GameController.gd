@@ -1,8 +1,8 @@
 extends Node2D
 
-export var money_gain_seconds = 5
-export var money_gain_rate = 5
-export var cat_spawn_rate_seconds = 27
+export var money_gain_seconds = 1
+export var money_gain_rate = 1
+export var cat_spawn_rate_seconds = 23
 
 var money = 0
 var money_gain_cooldown = 0
@@ -15,19 +15,19 @@ onready var room = $Room
 var interaction_map = {
 	"pet": {
 		"cursor_image": preload("res://sprites/pet_cursor.png"),
-		"hotspot": Vector2(7, 6),
+		"hotspot": Vector2(12, 12),
 		"energy_cost": 2,
 		"is_interaction": true,
 	},
 	"treat": {
 		"cursor_image": preload("res://sprites/treat_cursor.png"),
-		"hotspot": Vector2(7, 6),
+		"hotspot": Vector2(8, 8),
 		"energy_cost": 4,
 		"is_interaction": true,
 	},
 	"catnip": {
 		"cursor_image": preload("res://sprites/catnip_cursor.png"),
-		"hotspot": Vector2(7, 6),
+		"hotspot": Vector2(8, 8),
 		"energy_cost": 5,
 		"is_interaction": true,
 	},

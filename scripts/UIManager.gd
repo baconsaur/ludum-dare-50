@@ -9,29 +9,29 @@ var use_button_group = preload("res://scenes/buttons/UseButtonGroup.tres")
 var default_button = null
 var button_config = {
 	"pet": {
-		"icon": null,
+		"icon": preload("res://sprites/heart_icon.png"),
 		"cost": 0,
 		"button": null,
 	},
 	"treat": {
-		"icon": null,
-		"cost": 5,
+		"icon": preload("res://sprites/treat_icon.png"),
+		"cost": 3,
 		"button": null,
 	},
 	"catnip": {
-		"icon": null,
-		"cost": 10,
+		"icon": preload("res://sprites/catnip_icon.png"),
+		"cost": 7,
 		"button": null,
 	},
 	"fix": {
-		"icon": null,
-		"cost": 20,
+		"icon": preload("res://sprites/fix_icon.png"),
+		"cost": 15,
 		"button": null,
 	},
 }
 
-onready var dollar_label = $NinePatchRect/CenterContainer/VBoxContainer/Dollars
-onready var button_container = $NinePatchRect/CenterContainer/VBoxContainer
+onready var dollar_label = $NinePatchRect/VBoxContainer/Dollars
+onready var button_container = $NinePatchRect/VBoxContainer
 
 signal buy_item
 signal set_active_tool
@@ -47,6 +47,7 @@ func _ready():
 			button = create_buy_button(config, button_config[config]["cost"])
 		button_config[config]["button"] = button
 		button_container.add_child(button)
+		button.get_node("Icon").texture = button_config[config]["icon"]
 
 func _process(delta):
 	if not get_tree().paused and Input.is_action_just_pressed("ui_cancel"):
@@ -65,13 +66,16 @@ func set_dollars(amount):
 func toggle_default():
 	default_button.set_pressed(true)
 
-func replace_button(old, new, name):
+func replace_button(old, new, button_name):
 	var pos_in_parent = old.get_position_in_parent()
 	button_container.remove_child(old)
 	button_container.add_child(new)
+	
+	new.get_node("Icon").texture = button_config[button_name]["icon"]
+	
 	button_container.move_child(new, pos_in_parent)
 	old.queue_free()
-	button_config[name]["button"] = new
+	button_config[button_name]["button"] = new
 
 func use_item(item_name):
 	if item_name == "pet":

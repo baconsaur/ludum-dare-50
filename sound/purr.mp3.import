@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/purr.mp3-a94e240794ee481be6309e31f3096732.mp3str"
+
+[deps]
+
+source_file="res://sound/purr.mp3"
+dest_files=[ "res://.import/purr.mp3-a94e240794ee481be6309e31f3096732.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0.38

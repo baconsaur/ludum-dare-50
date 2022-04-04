@@ -10,18 +10,23 @@ var grid_pos = Vector2()
 var current_direction = Vector2(-1, 1)
 var target_position = Vector2()
 var interact_cooldown = 0
+var meow_sounds = []
 
 onready var sprite = $Sprite
 onready var collider = $CollisionShape2D
 onready var state_machine = $StateMachine
 onready var tween = $Tween
 onready var room_controller = get_node("/root/Game/Room")
+onready var purr_sound = $Purr
+onready var eat_sound = $Eat
+onready var catnip_sound = $Nip
 
 signal needs_path
 signal change_position
 signal interaction_received
 
 func _ready():
+	meow_sounds = $Meows.get_children()
 	state_machine.initialize(start_state)
 
 func _process(delta):
@@ -39,8 +44,6 @@ func increase_energy(energy_gain):
 
 func decrease_energy(energy_loss):
 	energy -= energy_loss
-	if energy <= 0:
-		energy = 0
 
 func request_path():
 	emit_signal("needs_path", self)
@@ -51,7 +54,7 @@ func set_path(new_path):
 
 func path_step():
 	if not path:
-		state_machine.interrupt_state("sleep")
+		request_path()
 		return
 
 	var old_grid_pos = grid_pos

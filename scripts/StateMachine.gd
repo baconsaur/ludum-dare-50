@@ -31,6 +31,9 @@ func _process(delta):
 	current_state.update(delta)
 
 func _change_state(new_state):
+	if states_map[new_state] == current_state:
+		return
+	
 	current_state.exit()
 	
 	current_state = states_map[new_state]

@@ -5,6 +5,7 @@ var cooldown = 0
 
 func enter():
 	owner.play_animation("treat")
+	owner.eat_sound.play()
 	cooldown = interact_timeout_seconds
 
 func update(delta):

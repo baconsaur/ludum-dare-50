@@ -5,7 +5,7 @@ var cooldown = 0
 
 func enter():
 	owner.play_animation("pet")
-	# TODO add sound
+	owner.purr_sound.play()
 	cooldown = interact_timeout_seconds
 
 func update(delta):

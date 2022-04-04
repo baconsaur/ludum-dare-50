@@ -3,7 +3,7 @@ extends Node2D
 export var start_grid_position = Vector2(0, 32)
 export var tile_dimensions = Vector2(16, 8)
 export var num_desctructibles = 8
-export var destructibles_per_hunt = 3
+export var destructibles_per_hunt = 1
 
 var floor_tiles = ["wood", "carpet"]
 var wall_tiles = ["wall_xn", "wall_x", "wall_xs", "wall_yn", "wall_y", "wall_ys", "pillar", "wall_br", "wall_bl", "wall_blx", "wall_bry", "blank"]
@@ -32,6 +32,7 @@ var cat_obj = preload("res://scenes/Cat.tscn")
 var destructible_objs = [preload("res://scenes/Destructible.tscn")]
 var game_over_scene = "res://scenes/GameOver.tscn"
 var cat_skins = [preload("res://sprites/cat1_frames.tres")]
+var destructible_skins = [preload("res://sprites/destructible1_frames.tres"), preload("res://sprites/destructible2_frames.tres"), preload("res://sprites/destructible3_frames.tres")]
 
 signal cat_interaction
 
@@ -108,6 +109,10 @@ func spawn_destructible():
 	var destructible = destructible_obj.instance()
 	destructible.setup(Vector2(grid_x, grid_y))
 	grid_space.add_destructible(destructible, grid_space.position)
+	
+	var destructible_skin = destructible_skins[randi() % len(destructible_skins)]
+	destructible.sprite.set_sprite_frames(destructible_skin)
+
 	destructibles.append(destructible)
 
 func spawn_cat():
@@ -126,10 +131,13 @@ func spawn_cat():
 	cat.connect("interaction_received", self, "handle_cat_interaction")
 	add_child(cat)
 	var cat_skin = cat_skins[randi() % len(cat_skins)]
-	
 	cat.sprite.set_sprite_frames(cat_skin)
+	
 	cat.position = to_isometric(grid_x, grid_y)
 	cat.grid_pos = Vector2(grid_x, grid_y)
+	
+	var pos_in_parent = current_grid_space.get_position_in_parent()
+	move_child(cat, pos_in_parent + 1)
 	
 	cats.append(cat)
 
@@ -141,10 +149,6 @@ func generate_path(cat):
 	for instance in destructibles:
 		if not instance.is_destroyed:
 			possible_destructibles.append(instance)
-
-	if not possible_destructibles:
-		get_tree().change_scene(game_over_scene)
-		return
 
 	possible_destructibles.shuffle()
 
@@ -176,7 +180,11 @@ func get_cell_neighbors(x, y):
 	]
 
 func check_cat(cat):
-	var destructible = grid[cat.grid_pos.x][cat.grid_pos.y].occupying_destructible
+	var grid_space = grid[cat.grid_pos.x][cat.grid_pos.y]
+	var pos_in_parent = grid_space.get_position_in_parent()
+	move_child(cat, pos_in_parent + 1)
+	
+	var destructible = grid_space.occupying_destructible
 
 	if not destructible or destructible.is_destroyed:
 		return
@@ -184,6 +192,14 @@ func check_cat(cat):
 	destructible.destroy()
 	destroyed_destructibles.append(destructible)
 	cat.destroy_object()
+	
+	var possible_destructibles = []
+	for instance in destructibles:
+		if not instance.is_destroyed:
+			possible_destructibles.append(instance)
+	
+	if not possible_destructibles:
+		get_tree().change_scene(game_over_scene)
 
 func handle_cat_interaction(cat):
 	emit_signal("cat_interaction", cat)
@@ -191,6 +207,7 @@ func handle_cat_interaction(cat):
 func fix_destructible():
 	if destroyed_destructibles:
 		var destructible = destroyed_destructibles.pop_front()
+		destructible.get_parent().sparkle()
 		destructible.fix()
 	else:
 		spawn_destructible()

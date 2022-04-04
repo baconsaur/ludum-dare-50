@@ -3,7 +3,10 @@ extends State
 var move_timeout_seconds = 0.2
 var cooldown = 0
 var last_position = Vector2()
+var meow_chance = 0.15
+
 func _ready():
+	randomize()
 	VALID_INTERRUPTS = ["sleep", "pet", "treat", "catnip"]
 
 func enter():
@@ -19,6 +22,9 @@ func update(delta):
 	
 	owner.tween.interpolate_property(owner, "position", last_position, owner.target_position, move_timeout_seconds, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	owner.tween.start()
+	
+	if randf() <= meow_chance:
+		owner.meow_sounds[randi() % len(owner.meow_sounds) -1].play()
 
 	if owner.energy <= 0:
 		emit_signal("finished", "sleep")
