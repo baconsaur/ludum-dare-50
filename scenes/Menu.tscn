@@ -2,10 +2,7 @@
 
 [ext_resource path="res://sprites/fonts/dpcomic.regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://scripts/MainMenu.gd" type="Script" id=2]
-
-[sub_resource type="DynamicFont" id=1]
-size = 30
-font_data = ExtResource( 1 )
+[ext_resource path="res://sprites/logo.png" type="Texture" id=3]
 
 [sub_resource type="DynamicFont" id=7]
 size = 15
@@ -45,30 +42,27 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/CenterContainer"]
-margin_left = 84.0
-margin_top = 87.0
-margin_right = 257.0
-margin_bottom = 168.0
+margin_left = 87.0
+margin_top = 68.0
+margin_right = 253.0
+margin_bottom = 188.0
 grow_vertical = 0
 size_flags_vertical = 3
 
-[node name="Title" type="Label" parent="CanvasLayer/UI/CenterContainer/VBoxContainer"]
-margin_right = 173.0
-margin_bottom = 45.0
-rect_min_size = Vector2( 0, 45 )
-custom_fonts/font = SubResource( 1 )
-text = "Tabby Turmoil"
-align = 1
-valign = 1
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/CenterContainer/VBoxContainer"]
+margin_right = 166.0
+margin_bottom = 84.0
+texture = ExtResource( 3 )
+stretch_mode = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/CenterContainer/VBoxContainer"]
-margin_top = 49.0
-margin_right = 173.0
-margin_bottom = 81.0
+margin_top = 88.0
+margin_right = 166.0
+margin_bottom = 120.0
 grow_vertical = 2
 
 [node name="StartButton" type="Button" parent="CanvasLayer/UI/CenterContainer/VBoxContainer/VBoxContainer"]
-margin_right = 173.0
+margin_right = 166.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 custom_fonts/font = SubResource( 7 )
